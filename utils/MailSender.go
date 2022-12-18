@@ -26,5 +26,6 @@ func SendMail(from string, subject string, body string, mailconfig MailConfig, t
 	if err != nil {
 		return err
 	}
+	Printsuc("%v -> %v发送成功", from, to)
 	return nil
 }
