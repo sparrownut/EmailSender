@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"github.com/urfave/cli/v2"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -49,10 +50,11 @@ func run() {
 				return recvListFileerr
 			}
 			scanner := bufio.NewScanner(recvlist)
-			for scanner.Scan() {
+			for scanner.Scan() { // 读取接收者列表
 				recver := scanner.Text()
+				mailBodyTMP := strings.ReplaceAll(string(mailBody), "%RECV_EMAIL%", recver)
 			mailsend:
-				err := utils.SendMail(mailConfig.Username, mailTitle, string(mailBody), mailConfig, recver)
+				err := utils.SendMail(mailConfig.Username, mailTitle, mailBodyTMP, mailConfig, recver)
 				if err != nil {
 					utils.Printerr("%v->%v发送失败 重试中...", mailConfig.Username, recver)
 					if dbg { // 调试模式报错
